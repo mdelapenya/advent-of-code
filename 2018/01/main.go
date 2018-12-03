@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	log.Println("Advent of code 2018")
+	log.Println("Advent of code 2018: Day 1")
 
 	output := "input"
 
@@ -17,7 +17,8 @@ func main() {
 		panic(err)
 	}
 
-	log.Println(sum(lines))
+	log.Printf("Sum of all frequencies: %d", sum(lines))
+	log.Printf("First duplicate frequency: %d", detectFrequencyChangeList(lines))
 }
 
 func detectFrequencyChangeList(lines []string) int {
