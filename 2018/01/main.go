@@ -20,6 +20,24 @@ func main() {
 	log.Println(sum(lines))
 }
 
+func detectFrequencyChangeList(lines []string) int {
+	frequency := 0
+	frequencies := map[int]bool{0: true}
+
+	for { // we have to loop over the entire list until we find the repeated frequency
+		for _, line := range lines {
+			delta, _ := strconv.Atoi(line)
+			frequency += delta
+
+			if _, exists := frequencies[frequency]; exists {
+				return frequency
+			}
+
+			frequencies[frequency] = true
+		}
+	}
+}
+
 // readLines reads a whole file into memory and returns a slice of its lines.
 func readLines(path string) ([]string, error) {
 	file, err := os.Open(path)
