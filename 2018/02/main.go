@@ -17,6 +17,52 @@ func main() {
 	}
 
 	log.Printf("Checksum: %d", findIDs(lines))
+	log.Printf("Common IDs: %s", findNearIDs(lines))
+}
+
+func diffExactlyByOne(s1 string, s2 string) (bool, string) {
+	if len(s1) != len(s2) {
+		return false, s1
+	}
+
+	r1 := []rune(s1)
+	r2 := []rune(s2)
+	differences := 0
+	common := []rune("")
+
+	for i, c1 := range r1 {
+		if c1 != r2[i] {
+			differences++
+			if differences == 2 {
+				return false, s1
+			}
+		} else {
+			common = append(common, c1)
+		}
+	}
+
+	return (differences == 1), string(common)
+}
+
+func findNearIDs(ids []string) string {
+	common := ""
+	diff := false
+
+	for i, idi := range ids {
+		for j, idj := range ids {
+			if i == j {
+				continue
+			}
+
+			diff, common = diffExactlyByOne(idi, idj)
+
+			if diff {
+				return common
+			}
+		}
+	}
+
+	return common
 }
 
 func findIDs(ids []string) int {

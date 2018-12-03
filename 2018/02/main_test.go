@@ -6,6 +6,34 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func extractB(s1 string, s2 string) bool {
+	b, _ := diffExactlyByOne(s1, s2)
+
+	return b
+}
+
+func extractS(s1 string, s2 string) string {
+	_, s := diffExactlyByOne(s1, s2)
+
+	return s
+}
+func TestDiffFindNear(t *testing.T) {
+	assert := assert.New(t)
+
+	lines, _ := readLines("input")
+	assert.Equal("rteotyxzbodglnpkudawhijsc", findNearIDs(lines))
+}
+
+func TestDiffExactlyByOne(t *testing.T) {
+	assert := assert.New(t)
+
+	assert.Equal(false, extractB("abcde", "abcde"))
+	assert.Equal(false, extractB("abcde", "fghij"))
+	assert.Equal(false, extractB("abcde", "axcye"))
+	assert.Equal(true, extractB("fghij", "fguij"))
+	assert.Equal("fgij", extractS("fghij", "fguij"))
+}
+
 func TestFindIDs(t *testing.T) {
 	assert := assert.New(t)
 
