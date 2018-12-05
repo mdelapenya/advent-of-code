@@ -3,6 +3,7 @@ package main
 import (
 	"testing"
 
+	"github.com/mdelapenya/advent-of-code/2018/io"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -20,7 +21,7 @@ func extractS(s1 string, s2 string) string {
 func TestDiffFindNear(t *testing.T) {
 	assert := assert.New(t)
 
-	lines, _ := readLines("input")
+	lines, _ := io.ReadLines("input")
 	assert.Equal("rteotyxzbodglnpkudawhijsc", findNearIDs(lines))
 }
 
@@ -37,7 +38,7 @@ func TestDiffExactlyByOne(t *testing.T) {
 func TestFindIDs(t *testing.T) {
 	assert := assert.New(t)
 
-	lines, _ := readLines("input")
+	lines, _ := io.ReadLines("input")
 	assert.Equal(6150, findIDs(lines))
 }
 

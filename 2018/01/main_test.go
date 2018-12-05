@@ -3,6 +3,7 @@ package main
 import (
 	"testing"
 
+	"github.com/mdelapenya/advent-of-code/2018/io"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -18,7 +19,7 @@ func TestDetectFirstFrequency(t *testing.T) {
 func TestDetectFirstFrequencyFromInput(t *testing.T) {
 	assert := assert.New(t)
 
-	lines, _ := readLines("input")
+	lines, _ := io.ReadLines("input")
 	assert.Equal(241, detectFrequencyChangeList(lines))
 }
 
@@ -33,7 +34,7 @@ func TestSum(t *testing.T) {
 func TestSumFromInput(t *testing.T) {
 	assert := assert.New(t)
 
-	lines, _ := readLines("input")
+	lines, _ := io.ReadLines("input")
 	assert.Equal(592, sum(lines))
 }
 
