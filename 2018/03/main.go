@@ -36,6 +36,18 @@ func abs(x int) int {
 	return x
 }
 
+func (s square) checkOverlap(plotter [][]int) bool {
+	for i := s.Left; i < s.totalWidth(); i++ {
+		for j := s.Top; j < s.totalHeight(); j++ {
+			if plotter[i][j] != 1 {
+				return false
+			}
+		}
+	}
+
+	return true
+}
+
 func (s square) plot(plotter [][]int) {
 	for i := s.Left; i < s.totalWidth(); i++ {
 		for j := s.Top; j < s.totalHeight(); j++ {
@@ -99,7 +111,14 @@ func countClaims(lines []string) int {
 
 	log.Printf("Using Matrix of (%v, %v): %d.", maxWidth, maxHeight, maxHeight*maxHeight)
 	log.Printf("There were %d claims.", claims)
-	log.Printf("There were %d claims without selection.", zeros)
+
+	for _, square := range squares {
+		clean := square.checkOverlap(plotter)
+		if clean {
+			log.Printf("The only one square with no overlaps is: #%d", square.ID)
+		}
+	}
+
 	return collitions
 }
 
