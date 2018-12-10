@@ -41,6 +41,13 @@ type guardAction struct {
 	Date date
 }
 
+type solution struct {
+	MostSleepyGuardID           int
+	MinuteMostSlept             int
+	MostFrequentlySleepyGuardID int
+	MinuteMostFrequentlySlept   int
+}
+
 func main() {
 	log.Println("Advent of code 2018: Day 4")
 
@@ -51,18 +58,41 @@ func main() {
 		panic(err)
 	}
 
-	guardID, min := chooseGuard(lines)
+	solution := chooseGuard(lines)
+	guardID := solution.MostSleepyGuardID
+	min := solution.MinuteMostSlept
+	frequentGuardID := solution.MostFrequentlySleepyGuardID
+	frequentMin := solution.MinuteMostFrequentlySlept
+
 	log.Printf(
 		"The selected Guard (%d), multiplied by the minute she is mostly sleeping (%d) is: %d",
 		guardID, min, (guardID * min))
+	log.Printf(
+		"The most frequently sleepy Guard (%d), multiplied by the minute she is mostly sleeping (%d) is: %d",
+		frequentGuardID, frequentMin, (frequentGuardID * frequentMin))
 }
 
-func chooseGuard(lines []string) (int, int) {
+func checkFrequentMinutesAsleep(m minutes) [60]int {
+	mins := [60]int{}
+
+	for i, min := range m.Minutes {
+		if min.Asleep {
+			mins[i] = 1
+		} else {
+			mins[i] = 0
+		}
+	}
+
+	return mins
+}
+
+func chooseGuard(lines []string) solution {
 	guards := captureGuards(lines)
 
 	timeline := getTimeline(guards)
 
 	minutesAsleepByGuard := map[int]int{}
+	frequestMinutesAsleepByGuard := map[int][60]int{}
 
 	for _, days := range timeline {
 		minutesAsleep := countMinutesAsleep(days)
@@ -71,6 +101,14 @@ func chooseGuard(lines []string) (int, int) {
 			minutesAsleepByGuard[days.GuardID] = minutesAsleep + val
 		} else {
 			minutesAsleepByGuard[days.GuardID] = minutesAsleep
+		}
+
+		frequentMinutesAsleep := checkFrequentMinutesAsleep(days)
+
+		if val, ok := frequestMinutesAsleepByGuard[days.GuardID]; ok {
+			frequestMinutesAsleepByGuard[days.GuardID] = sumArrays(frequentMinutesAsleep, val)
+		} else {
+			frequestMinutesAsleepByGuard[days.GuardID] = frequentMinutesAsleep
 		}
 	}
 
@@ -86,7 +124,26 @@ func chooseGuard(lines []string) (int, int) {
 
 	goldenMinute := getMostProbablyMinute(mostSleepyGuard, timeline)
 
-	return mostSleepyGuard, goldenMinute
+	highestFrequency := 0
+	mostFrequentlySleepyGuardID := 0
+	mostFrequentMinuteSleep := 0
+
+	for guardID, frequentMinutesAsleep := range frequestMinutesAsleepByGuard {
+		frequentMinute, frequency := getMostFrequentMinuteAndFrequency(guardID, frequentMinutesAsleep)
+
+		if frequency > highestFrequency {
+			highestFrequency = frequency
+			mostFrequentMinuteSleep = frequentMinute
+			mostFrequentlySleepyGuardID = guardID
+		}
+	}
+
+	return solution{
+		MostSleepyGuardID:           mostSleepyGuard,
+		MinuteMostSlept:             goldenMinute,
+		MostFrequentlySleepyGuardID: mostFrequentlySleepyGuardID,
+		MinuteMostFrequentlySlept:   mostFrequentMinuteSleep,
+	}
 }
 
 func countMinutesAsleep(m minutes) int {
@@ -99,6 +156,20 @@ func countMinutesAsleep(m minutes) int {
 	}
 
 	return count
+}
+
+func getMostFrequentMinuteAndFrequency(ID int, minutes [60]int) (int, int) {
+	mostFrequentMinute := 0
+	highestFrequency := 0
+
+	for i, m := range minutes {
+		if m > highestFrequency {
+			mostFrequentMinute = i
+			highestFrequency = m
+		}
+	}
+
+	return mostFrequentMinute, highestFrequency
 }
 
 func getMostProbablyMinute(guardID int, timeline map[string]minutes) int {
@@ -229,6 +300,16 @@ func captureGuards(lines []string) map[int]guard {
 	}
 
 	return guards
+}
+
+func sumArrays(a1 [60]int, a2 [60]int) [60]int {
+	sum := [60]int{}
+
+	for i := 0; i < 60; i++ {
+		sum[i] = a1[i] + a2[i]
+	}
+
+	return sum
 }
 
 func parseAction(line string) *guardAction {

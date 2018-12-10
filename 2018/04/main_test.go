@@ -34,10 +34,19 @@ func TestChooseGuard(t *testing.T) {
 	assert := assert.New(t)
 
 	lines, _ := io.ReadLines("input")
-	guardID, min := chooseGuard(lines)
+	solution := chooseGuard(lines)
+
+	guardID := solution.MostSleepyGuardID
+	min := solution.MinuteMostSlept
 
 	assert.Equal(1021, guardID)
 	assert.Equal(30, min)
+
+	frequentGuardID := solution.MostFrequentlySleepyGuardID
+	frequentMin := solution.MinuteMostFrequentlySlept
+
+	assert.Equal(3331, frequentGuardID)
+	assert.Equal(41, frequentMin)
 }
 
 func TestCountMinutesAsleep(t *testing.T) {
