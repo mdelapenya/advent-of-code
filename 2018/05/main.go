@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"strings"
+	"unicode"
 
 	"github.com/mdelapenya/advent-of-code/2018/io"
 )
@@ -30,6 +31,37 @@ func hasReactions(polymer string) bool {
 	return false
 }
 
+func getShorterReaction(polymer string) (string, string) {
+	shortestPolymers := map[string]string{}
+
+	for _, lower := range lowerCase {
+		upper := unicode.ToUpper(lower)
+		result := strings.Replace(polymer, string(lower), "", -1)
+		result = strings.Replace(result, string(upper), "", -1)
+
+		r := removeReactions(result)
+
+		shortestPolymers[string(lower)+"/"+string(upper)] = r
+	}
+
+	var k string
+	shortestPolymer := polymer
+
+	for _, lower := range lowerCase {
+		upper := unicode.ToUpper(lower)
+		key := string(lower) + "/" + string(upper)
+
+		val := shortestPolymers[key]
+
+		if len(val) < len(shortestPolymer) {
+			shortestPolymer = val
+			k = key
+		}
+	}
+
+	return k, shortestPolymer
+}
+
 func main() {
 	log.Println("Advent of code 2018: Day 5")
 
@@ -46,6 +78,9 @@ func main() {
 
 	polymer := removeReactions(lines[0])
 	log.Printf("The resultant polymer is %s, with length of %d", polymer, len(polymer))
+
+	r, p := getShorterReaction(polymer)
+	log.Printf("The shorter polymer is caused by the removal of %s, with length %d", r, len(p))
 }
 
 func removeReactions(polymer string) string {

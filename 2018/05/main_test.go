@@ -15,6 +15,26 @@ func TestPolymer(t *testing.T) {
 	polymer := removeReactions(polymers[0])
 	assert.Equal(10250, len(polymer))
 }
+
+func TestGetShorterPolymer(t *testing.T) {
+	assert := assert.New(t)
+
+	polymers, _ := io.ReadLines("polymers")
+
+	polymer := removeReactions(polymers[0])
+	key, shorterPolymer := getShorterReaction(polymer)
+	assert.Equal(key, "l/L")
+	assert.Equal(6188, len(shorterPolymer))
+}
+
+func TestGetShorterReaction(t *testing.T) {
+	assert := assert.New(t)
+
+	s, polymer := getShorterReaction("dabAcCaCBAcCcaDA")
+	assert.Equal("daDA", polymer)
+	assert.Equal("c/C", s)
+}
+
 func TestHasReactions(t *testing.T) {
 	assert := assert.New(t)
 
