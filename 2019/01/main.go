@@ -23,13 +23,21 @@ func main() {
 		fuel += calculateRequiredFuel(l)
 	}
 
-	log.Printf("The sum of the fuel requirements for all of the modules on my spacecraft is: %d", fuel)
+	log.Printf("The sum of the fuel requirements for all of the modules on my spacecraft when also taking into account the mass of the added fuel is: %d", fuel)
 }
 
 func calculateRequiredFuel(mass int) int {
+	if mass <= 0 {
+		return 0
+	}
+
 	fuel := mass / 3
 
 	fuel -= 2
 
-	return fuel
+	if fuel <= 0 {
+		return 0
+	}
+
+	return fuel + calculateRequiredFuel(fuel)
 }
