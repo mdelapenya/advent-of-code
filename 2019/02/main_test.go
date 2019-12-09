@@ -11,19 +11,19 @@ func TestNewIntcode(t *testing.T) {
 
 	codes := []int{1, 9, 10, 3, 2, 3, 11, 0, 99, 30, 40, 50}
 
-	i := NewIntcode(0, codes)
+	inst := NewInstruction(0, codes)
 
-	assert.Equal(1, i.opcode)
-	assert.Equal(9, i.first)
-	assert.Equal(10, i.second)
-	assert.Equal(3, i.result)
+	assert.Equal(1, inst.opcode)
+	assert.Equal(9, inst.arguments[0])
+	assert.Equal(10, inst.arguments[1])
+	assert.Equal(3, inst.arguments[2])
 
-	i = NewIntcode(4, codes)
+	inst = NewInstruction(4, codes)
 
-	assert.Equal(2, i.opcode)
-	assert.Equal(3, i.first)
-	assert.Equal(11, i.second)
-	assert.Equal(0, i.result)
+	assert.Equal(2, inst.opcode)
+	assert.Equal(3, inst.arguments[0])
+	assert.Equal(11, inst.arguments[1])
+	assert.Equal(0, inst.arguments[2])
 }
 
 func TestExecuteIntcodeMultiply(t *testing.T) {
@@ -31,11 +31,10 @@ func TestExecuteIntcodeMultiply(t *testing.T) {
 
 	codes := []int{2, 3, 0, 3, 99}
 
-	i := NewIntcode(0, codes)
+	inst := NewInstruction(0, codes)
+	result := inst.execute(codes)
 
-	result := i.execute(codes)
-
-	assert.Equal(6, result[i.result])
+	assert.Equal(6, result[inst.arguments[len(inst.arguments)-1]])
 }
 
 func TestExecuteIntcodeMultiply2(t *testing.T) {
@@ -43,21 +42,20 @@ func TestExecuteIntcodeMultiply2(t *testing.T) {
 
 	codes := []int{2, 4, 4, 5, 99, 0}
 
-	i := NewIntcode(0, codes)
+	inst := NewInstruction(0, codes)
+	result := inst.execute(codes)
 
-	result := i.execute(codes)
-
-	assert.Equal(9801, result[i.result])
+	assert.Equal(9801, result[inst.arguments[len(inst.arguments)-1]])
 }
 
 func TestExecuteIntcodeSum(t *testing.T) {
 	assert := assert.New(t)
 
 	codes := []int{1, 0, 0, 0, 99}
-	i := NewIntcode(0, codes)
-	result := i.execute(codes)
+	inst := NewInstruction(0, codes)
+	result := inst.execute(codes)
 
-	assert.Equal(2, result[i.result])
+	assert.Equal(2, result[inst.arguments[len(inst.arguments)-1]])
 }
 
 func TestLoop(t *testing.T) {

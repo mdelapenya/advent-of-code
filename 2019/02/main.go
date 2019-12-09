@@ -42,44 +42,52 @@ func loop(codes []int) int {
 			break
 		}
 
-		intCode := NewIntcode(i, codes)
-		codes = intCode.execute(codes)
+		inst := NewInstruction(i, codes)
+		codes = inst.execute(codes)
 	}
 
 	return codes[0]
 }
 
-// Intcode represents an int code program
-type Intcode struct {
-	opcode int // 1 = sum; 2 = multiplication
-	first  int // position of the first opcode
-	second int // position of the second opcode
-	result int // position of the result
+// Instruction represented by the opcode and its arguments
+type Instruction struct {
+	opcode    int
+	arguments []int
 }
 
-// NewIntcode returns an Intcode from a position in the array
-func NewIntcode(pos int, codes []int) Intcode {
-	return Intcode{
-		opcode: codes[pos],
-		first:  codes[pos+1],
-		second: codes[pos+2],
-		result: codes[pos+3],
+// NewInstruction creates an instruction from a Intcode
+func NewInstruction(pos int, codes []int) Instruction {
+	return Instruction{
+		opcode:    codes[pos],
+		arguments: []int{codes[pos+1], codes[pos+2], codes[pos+3]},
 	}
 }
 
-func (ic *Intcode) execute(codes []int) []int {
+// NewHaltInstruction creates an instruction for halting the program
+func NewHaltInstruction() Instruction {
+	return Instruction{
+		opcode:    exitCode,
+		arguments: []int{},
+	}
+}
+
+func (i *Instruction) nextPointer() int {
+	return 1 + len(i.arguments)
+}
+
+func (i *Instruction) execute(codes []int) []int {
 	value := 0
-	if ic.opcode == sumCode {
-		value = codes[ic.first] + codes[ic.second]
-	} else if ic.opcode == multiplyCode {
-		value = codes[ic.first] * codes[ic.second]
-	} else if ic.opcode == exitCode {
+	if i.opcode == sumCode {
+		value = codes[i.arguments[0]] + codes[i.arguments[1]]
+	} else if i.opcode == multiplyCode {
+		value = codes[i.arguments[0]] * codes[i.arguments[1]]
+	} else if i.opcode == exitCode {
 		return codes
 	} else {
-		log.Panicf("Code not accepted: %d", ic.opcode)
+		log.Panicf("Code not accepted: %d", i.opcode)
 	}
 
-	codes[ic.result] = value
+	codes[i.arguments[2]] = value
 
 	return codes
 }
