@@ -3,7 +3,7 @@ package main
 import (
 	"testing"
 
-	"github.com/mdelapenya/advent-of-code/2018/io"
+	"github.com/mdelapenya/advent-of-code/io"
 	"github.com/stretchr/testify/assert"
 )
 

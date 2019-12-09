@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/mdelapenya/advent-of-code/2018/io"
+	"github.com/mdelapenya/advent-of-code/io"
 )
 
 func main() {

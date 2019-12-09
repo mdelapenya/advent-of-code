@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/mdelapenya/advent-of-code/2018/io"
+	"github.com/mdelapenya/advent-of-code/io"
 )
 
 const regexpAction = "\\[([0-9]+)-([0-9]+)-([0-9]+) ([0-9]+):([0-9]+)\\] (.+)"
