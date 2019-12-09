@@ -51,32 +51,32 @@ func loop(codes []int) int {
 
 // Intcode represents an int code program
 type Intcode struct {
-	operator int // 1 = sum; 2 = multiplication
-	first    int // position of the first operator
-	second   int // position of the second operator
-	result   int // position of the result
+	opcode int // 1 = sum; 2 = multiplication
+	first  int // position of the first opcode
+	second int // position of the second opcode
+	result int // position of the result
 }
 
 // NewIntcode returns an Intcode from a position in the array
 func NewIntcode(pos int, codes []int) Intcode {
 	return Intcode{
-		operator: codes[pos],
-		first:    codes[pos+1],
-		second:   codes[pos+2],
-		result:   codes[pos+3],
+		opcode: codes[pos],
+		first:  codes[pos+1],
+		second: codes[pos+2],
+		result: codes[pos+3],
 	}
 }
 
 func (ic *Intcode) execute(codes []int) []int {
 	value := 0
-	if ic.operator == sumCode {
+	if ic.opcode == sumCode {
 		value = codes[ic.first] + codes[ic.second]
-	} else if ic.operator == multiplyCode {
+	} else if ic.opcode == multiplyCode {
 		value = codes[ic.first] * codes[ic.second]
-	} else if ic.operator == exitCode {
+	} else if ic.opcode == exitCode {
 		return codes
 	} else {
-		log.Panicf("Code not accepted: %d", ic.operator)
+		log.Panicf("Code not accepted: %d", ic.opcode)
 	}
 
 	codes[ic.result] = value

@@ -13,14 +13,14 @@ func TestNewIntcode(t *testing.T) {
 
 	i := NewIntcode(0, codes)
 
-	assert.Equal(1, i.operator)
+	assert.Equal(1, i.opcode)
 	assert.Equal(9, i.first)
 	assert.Equal(10, i.second)
 	assert.Equal(3, i.result)
 
 	i = NewIntcode(4, codes)
 
-	assert.Equal(2, i.operator)
+	assert.Equal(2, i.opcode)
 	assert.Equal(3, i.first)
 	assert.Equal(11, i.second)
 	assert.Equal(0, i.result)
