@@ -23,14 +23,23 @@ func main() {
 	}
 
 	sCodes := strings.Split(lines[0], ",")
-	codes := make([]int, len(sCodes))
-	for i, sCode := range sCodes {
-		codes[i], _ = strconv.Atoi(sCode)
+
+	for i := 1; i < 100; i++ {
+		for j := 1; j < 100; j++ {
+			codes := make([]int, len(sCodes))
+			for i, sCode := range sCodes {
+				codes[i], _ = strconv.Atoi(sCode)
+			}
+
+			if loop(i, j, codes) == 19690720 {
+				log.Printf("The input noun and verb that cause the program to produce the output 19690720 (100 * noun + verb) is: noun=%d verb=%d", i, j)
+
+				return
+			}
+		}
 	}
 
-	zero := loop(12, 2, codes)
-
-	log.Printf("The value that is left at position 0 after the program halts is %d", zero)
+	log.Fatal("Sorry, not found :(")
 }
 
 func loop(noun int, verb int, codes []int) int {
