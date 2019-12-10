@@ -28,15 +28,15 @@ func main() {
 		codes[i], _ = strconv.Atoi(sCode)
 	}
 
-	codes[1] = 12
-	codes[2] = 2
-
-	zero := loop(codes)
+	zero := loop(12, 2, codes)
 
 	log.Printf("The value that is left at position 0 after the program halts is %d", zero)
 }
 
-func loop(codes []int) int {
+func loop(noun int, verb int, codes []int) int {
+	codes[1] = noun
+	codes[2] = verb
+
 	for i := 0; i < (len(codes) - 4); i += 4 {
 		if codes[i] == exitCode {
 			break

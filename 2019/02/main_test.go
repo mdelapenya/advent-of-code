@@ -63,7 +63,7 @@ func TestLoop(t *testing.T) {
 
 	codes := []int{1, 1, 1, 4, 99, 5, 6, 0, 99}
 
-	i := loop(codes)
+	i := loop(1, 1, codes)
 
 	assert.Equal(30, i)
 }
