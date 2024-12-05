@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"math"
 	"sort"
-	"strconv"
 	"strings"
 
 	"github.com/mdelapenya/advent-of-code/io"
+	aocstrings "github.com/mdelapenya/advent-of-code/strings"
 )
 
 type LocationID int
@@ -38,14 +38,6 @@ func distance(left []LocationID, right []LocationID) int {
 	return distance
 }
 
-func mustParseLocationID(s string) LocationID {
-	id, err := strconv.Atoi(s)
-	if err != nil {
-		panic(err)
-	}
-	return LocationID(id)
-}
-
 func mustReadInput(path string) ([]LocationID, []LocationID) {
 	lines, err := io.ReadLines(path)
 	if err != nil {
@@ -57,8 +49,8 @@ func mustReadInput(path string) ([]LocationID, []LocationID) {
 	for _, line := range lines {
 		parts := strings.Fields(line)
 
-		inputLeft = append(inputLeft, mustParseLocationID(parts[0]))
-		inputRight = append(inputRight, mustParseLocationID(parts[1]))
+		inputLeft = append(inputLeft, LocationID(aocstrings.MustParseInt(parts[0])))
+		inputRight = append(inputRight, LocationID(aocstrings.MustParseInt(parts[1])))
 	}
 
 	return inputLeft, inputRight
