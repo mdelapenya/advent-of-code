@@ -16,7 +16,10 @@ func main() {
 	inputLeft, inputRight := mustReadInput("input.txt")
 
 	distance := distance(inputLeft, inputRight)
-	fmt.Println(distance)
+	fmt.Println("distance:", distance)
+
+	score := similarityScore(inputLeft, inputRight)
+	fmt.Println("similarity score:", score)
 }
 
 func distance(left []LocationID, right []LocationID) int {
@@ -59,6 +62,23 @@ func mustReadInput(path string) ([]LocationID, []LocationID) {
 	}
 
 	return inputLeft, inputRight
+}
+
+func similarityScore(left []LocationID, right []LocationID) int {
+	score := 0
+
+	for _, leftID := range left {
+		rightCount := 0
+		for _, rightID := range right {
+			if leftID == rightID {
+				rightCount++
+			}
+		}
+
+		score += int(leftID) * rightCount
+	}
+
+	return score
 }
 
 func sortLocation(list []LocationID) {

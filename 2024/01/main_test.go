@@ -20,6 +20,11 @@ func TestMustReadInput(t *testing.T) {
 	_, _ = mustReadInput("input.txt")
 }
 
+func TestSimilarityScore(t *testing.T) {
+	score := similarityScore(left, right)
+	require.Equal(t, 31, score)
+}
+
 func TestSortLocations(t *testing.T) {
 	// copy left and right to avoid modifying the original arrays
 	sortedLeft := append([]LocationID(nil), left...)
