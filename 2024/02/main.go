@@ -21,6 +21,33 @@ func main() {
 	}
 
 	fmt.Println("safe reports:", safeReports)
+
+	safeTolerantReports := 0
+	for _, report := range reports {
+		if isSafeWithDampener(report) {
+			safeTolerantReports++
+		}
+	}
+	fmt.Println("safe tolerant reports:", safeTolerantReports)
+}
+
+func isSafeWithDampener(report Report) bool {
+	if isSafe(report) {
+		return true
+	}
+
+	// try removing each level one by one
+	for i := 0; i < len(report); i++ {
+		newReport := make([]int, 0, len(report)-1)
+		newReport = append(newReport, report[:i]...)
+		newReport = append(newReport, report[i+1:]...)
+
+		if isSafe(newReport) {
+			return true
+		}
+	}
+
+	return false
 }
 
 func isSafe(report Report) bool {

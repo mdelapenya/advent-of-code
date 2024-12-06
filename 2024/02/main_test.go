@@ -28,3 +28,18 @@ func TestIsSafe(t *testing.T) {
 	require.False(t, isSafe(reports[4]))
 	require.True(t, isSafe(reports[5]))
 }
+
+func TestIsSafeWithTolerance_1(t *testing.T) {
+	var reports []Report
+
+	for _, line := range strings.Split(testInput, "\n") {
+		reports = append(reports, mustParseReport(line))
+	}
+
+	require.True(t, isSafeWithDampener(reports[0]))
+	require.False(t, isSafeWithDampener(reports[1]))
+	require.False(t, isSafeWithDampener(reports[2]))
+	require.True(t, isSafeWithDampener(reports[3]))
+	require.True(t, isSafeWithDampener(reports[4]))
+	require.True(t, isSafeWithDampener(reports[5]))
+}
